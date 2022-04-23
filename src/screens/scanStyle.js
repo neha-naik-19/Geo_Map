@@ -44,18 +44,31 @@ const styles = {
     marginTop: '10%',
     backgroundColor: 'white',
   },
+  scanDeviceWidth: {
+    width: deviceWidth - 32,
+    // height: deviceHeight / 2,
+    flex: 0.8,
+    borderWidth: 2,
+    borderColor: 'red',
+  },
   scanCardView: {
     width: deviceWidth - 32,
-    height: deviceHeight / 1.5, //2
+    // height: deviceHeight / 1.5,
+    flex: 0.8,
     alignSelf: 'center',
-    justifyContent: 'center',
+    // justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 10,
-    padding: 25,
+    paddingTop: 15,
+    paddingBottom: 10,
+    paddingLeft: 20,
+    paddingRight: 20,
     marginLeft: 5,
     marginRight: 5,
-    marginTop: 10,
+    marginTop: 5,
     backgroundColor: 'white',
+    // borderWidth: 2,
+    // borderColor: 'green',
   },
   buttonWrapper: {
     display: 'flex',
@@ -70,8 +83,11 @@ const styles = {
     paddingRight: 25,
     paddingBottom: 5,
     paddingLeft: 25,
-    marginTop: 20,
+    // marginTop: 20,
+    // alignItems: 'flex-end',
   },
+
+  hideBtn: {display: 'none'},
   buttonScan2: {
     marginLeft: deviceWidth / 2 - 50,
     width: 100,
@@ -112,6 +128,28 @@ const styles = {
   buttonTextStyle: {
     color: 'black',
     fontWeight: 'bold',
+  },
+  dataText: {
+    fontSize: 18,
+    color: '#0B0B45',
+    paddingBottom: 25,
+    fontWeight: 'bold',
+  },
+  dataLabel: {
+    fontSize: 18,
+    color: '#0B0B45',
+    paddingBottom: 25,
+    fontWeight: 'bold',
+    paddingRight: 20,
+  },
+  viewText: {flexDirection: 'row', paddingLeft: 10},
+  viewQty: {
+    flexDirection: 'row',
+    paddingLeft: 10,
+    // justifyContent: 'space-between',
+  },
+  textfiled: {
+    textAlign: 'center',
   },
 };
 export default styles;

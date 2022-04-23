@@ -7,8 +7,8 @@ import App from './App';
 import {name as appName} from './app.json';
 import {YellowBox, Logbox} from 'react-native';
 
-YellowBox.ignoreWarnings(['Warning: ...']);
+// YellowBox.ignoreWarnings(['Warning: ...']);
 // LogBox.ignoreLogs();
-console.disableYellowBox = true;
+// console.disableYellowBox = true;
 
 AppRegistry.registerComponent(appName, () => App);
