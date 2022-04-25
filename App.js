@@ -17,6 +17,7 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import Scan from './src/screens/Scan';
 import Test from './src/screens/Test';
+import GeoLocation from './src/screens/GeoLocation';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 const Stack = createNativeStackNavigator();
@@ -32,18 +33,11 @@ function App() {
           component={Scan}
           options={{
             headerShown: false,
-            // headerTitleAlign: 'Left',
-            // headerStyle: {
-            //   backgroundColor: '#ffff',
-            // },
           }}
         />
         <Stack.Screen name="Test" component={Test} />
+        <Stack.Screen name="GeoLocation" component={GeoLocation} />
       </Stack.Navigator>
-
-      {/* <Tab.Navigator>
-        <Button Title="test" />
-      </Tab.Navigator> */}
     </NavigationContainer>
   );
 }

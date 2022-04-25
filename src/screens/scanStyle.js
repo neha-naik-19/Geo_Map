@@ -132,7 +132,7 @@ const styles = {
   dataText: {
     fontSize: 18,
     color: '#0B0B45',
-    paddingBottom: 25,
+    paddingBottom: 40,
     fontWeight: 'bold',
   },
   dataLabel: {

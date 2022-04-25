@@ -41,7 +41,8 @@ const Scan = prop => {
   let deleteItem = [];
 
   const navigation = useNavigation();
-  // console.log('navigation :: ', navigation);
+  // console.log('navigation  :: ', navigation);
+  console.log('route  :: ', prop.route);
 
   const onSuccess = e => {
     const check = e.data.substring(0, 4);
@@ -294,9 +295,38 @@ const Scan = prop => {
                           </TouchableOpacity>
                         </View>
                       </View>
-                      <View style={styles.viewText}>
-                        <Text style={styles.dataLabel}>Location :</Text>
-                        <Text style={styles.dataText}>Test</Text>
+                      <View
+                        style={{
+                          // justifyContent: 'center',
+                          alignItems: 'center',
+                          borderWidth: 2,
+                          borderColor: '#D3D3D3',
+                          width: '50%',
+                          borderRadius: 10,
+                          padding: 5,
+                        }}>
+                        <TouchableOpacity
+                          style={{
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                          }}
+                          activeOpacity={0.5}
+                          onPress={() =>
+                            prop.navigation.navigate('GeoLocation')
+                          }>
+                          <Image
+                            source={{
+                              uri: 'https://raw.githubusercontent.com/AboutReact/sampleresource/master/location.png',
+                            }}
+                            style={{
+                              width: 50,
+                              height: 50,
+                            }}
+                          />
+                          <Text style={{fontWeight: 'bold', fontSize: 17}}>
+                            Current Location
+                          </Text>
+                        </TouchableOpacity>
                       </View>
                       <View
                         style={{
