@@ -1,4 +1,4 @@
-import React, {Component, useState, useEffect} from 'react';
+import React, {Component} from 'react';
 import {
   Text,
   StyleSheet,
@@ -9,21 +9,37 @@ import {
   TouchableOpacity,
   SafeAreaView,
   Image,
-  PermissionsAndroid,
 } from 'react-native';
 import MapView, {Marker, PROVIDER_GOOGLE} from 'react-native-maps';
 import Geolocation from '@react-native-community/geolocation';
 import {Dimensions} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import Fontisto from 'react-native-vector-icons/Fontisto';
 import Geocoder from 'react-native-geocoder';
 
-const GeoLocation = prop => {
-  const [currentLongitude, setCurrentLongitude] = useState(0);
-  const [currentLatitude, setCurrentLatitude] = useState(0);
-  const [locationStatus, setLocationStatus] = useState('');
-  Geocoder.fallbackToGoogle('AIzaSyDl4WjiXse1SS-UWOiLcSrHfxdmwBZgURA');
+let {width, height} = Dimensions.get('window');
+const ASPECT_RATIO = width / height;
+const LATITUDE = 15.2941957;
+const LONGITUDE = 73.9690292;
+const LATITUDE_DELTA = 0.0922;
+const LONGITUDE_DELTA = 0.0421;
+let addr = [];
+// const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
+Geocoder.fallbackToGoogle('AIzaSyDl4WjiXse1SS-UWOiLcSrHfxdmwBZgURA');
 
-  useEffect(() => {
+class GeoLocation_old extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      currentLatitude: 0,
+      currentLongitude: 0,
+      locationStatus: '',
+      error: null,
+    };
+  }
+
+  componentDidMount() {
     const requestLocationPermission = async () => {
       if (Platform.OS === 'ios') {
         getOneTimeLocation();
@@ -41,7 +57,7 @@ const GeoLocation = prop => {
             //To Check, If Permission is granted
             getOneTimeLocation();
             subscribeLocationLocation();
-            // geoAddress();
+            geoAddress();
           } else {
             setLocationStatus('Permission Denied');
           }
@@ -50,20 +66,19 @@ const GeoLocation = prop => {
         }
       }
     };
-
     requestLocationPermission();
 
     return () => {
       Geolocation.clearWatch(watchID);
     };
-  }, []);
+  }
 
-  const getOneTimeLocation = () => {
+  getOneTimeLocation = () => {
     setLocationStatus('Getting Location ...');
     Geolocation.getCurrentPosition(
       //Will give you the current location
       position => {
-        setLocationStatus('You are Here');
+        this.setState({locationStatus: 'You are Here'});
 
         //getting the Longitude from the location json
         const currentLongitude = JSON.stringify(position.coords.longitude);
@@ -71,14 +86,13 @@ const GeoLocation = prop => {
         //getting the Latitude from the location json
         const currentLatitude = JSON.stringify(position.coords.latitude);
 
-        //Setting Longitude state
-        setCurrentLongitude(currentLongitude);
-
-        //Setting Longitude state
-        setCurrentLatitude(currentLatitude);
+        this.setState({
+          currentLongitude: currentLongitude,
+          currentLatitude: currentLatitude,
+        });
       },
       error => {
-        setLocationStatus(error.message);
+        this.setState({locationStatus: error.message});
       },
       {
         enableHighAccuracy: false,
@@ -88,12 +102,12 @@ const GeoLocation = prop => {
     );
   };
 
-  const subscribeLocationLocation = () => {
+  subscribeLocationLocation = () => {
     watchID = Geolocation.watchPosition(
       position => {
         //Will give you the location on location change
 
-        setLocationStatus('You are Here');
+        this.setState({locationStatus: 'You are Here'});
         console.log(position);
 
         //getting the Longitude from the location json
@@ -102,14 +116,13 @@ const GeoLocation = prop => {
         //getting the Latitude from the location json
         const currentLatitude = JSON.stringify(position.coords.latitude);
 
-        //Setting Longitude state
-        setCurrentLongitude(currentLongitude);
-
-        //Setting Latitude state
-        setCurrentLatitude(currentLatitude);
+        this.setState({
+          currentLongitude: currentLongitude,
+          currentLatitude: currentLatitude,
+        });
       },
       error => {
-        setLocationStatus(error.message);
+        this.setState({locationStatus: error.message});
       },
       {
         enableHighAccuracy: false,
@@ -118,114 +131,121 @@ const GeoLocation = prop => {
     );
   };
 
-  const navigateBack = async () => {
-    var NY = {
-      lat: parseFloat(currentLatitude),
-      lng: parseFloat(currentLongitude),
-    };
+  geoAddress = async () => {
+    if (this.state.currentLatitude > 0 && this.state.currentLongitude > 0) {
+      var NY = {
+        lat: this.state.currentLatitude,
+        lng: this.state.currentLongitude,
+      };
 
-    const addr = await Geocoder.geocodePosition(NY);
-
-    prop.navigation.navigate('Scan', {
-      latitude: currentLatitude,
-      longitude: currentLongitude,
-      addr: addr[0],
-    });
+      addr = await Geocoder.geocodePosition(NY);
+      // console.log('address 1122: ', addr);
+    }
   };
 
-  return (
-    <SafeAreaView style={{flex: 1}}>
-      <View style={styles.container}>
-        <MapView
-          style={styles.map}
-          showsUserLocation={true}
-          followsUserLocation={true}
-          showsMyLocationButton={true}
-          zoomLevel={18}
-          loadingEnabled
-          scrollEnabled
-          zoomEnabled
-          pitchEnabled
-          rotateEnabled
-          region={{
-            latitude: parseFloat(currentLatitude),
-            longitude: parseFloat(currentLongitude),
-            latitudeDelta: 0.005,
-            longitudeDelta: 0.005,
-          }}>
-          <Marker
-            coordinate={{
-              latitude: parseFloat(currentLatitude),
-              longitude: parseFloat(currentLongitude),
-            }}
-            draggable
-            tracksViewChanges={true}
-            onDragEnd={e => {
-              console.log('dragEnd', e.nativeEvent.coordinate);
-            }}
-            pinColor="#CD5C5C"
-          />
-        </MapView>
-        <View style={styles.btnView}>
-          <TouchableOpacity
-            style={styles.touchableButton}
-            onPress={navigateBack}>
-            <Text style={{fontWeight: 'bold', fontSize: 15, color: '#191970'}}>
-              Use current location
+  render() {
+    this.geoAddress();
+    return (
+      <SafeAreaView style={{flex: 1}}>
+        <View style={styles.container}>
+          <MapView
+            style={styles.map}
+            showsUserLocation={true}
+            followsUserLocation={true}
+            showsMyLocationButton={true}
+            zoomLevel={18}
+            loadingEnabled
+            scrollEnabled
+            zoomEnabled
+            pitchEnabled
+            rotateEnabled
+            region={{
+              latitude: parseFloat(this.state.currentLatitude),
+              longitude: parseFloat(this.state.currentLongitude),
+              latitudeDelta: 0.005,
+              longitudeDelta: 0.005,
+            }}>
+            <Marker
+              coordinate={{
+                latitude: parseFloat(this.state.currentLatitude),
+                longitude: parseFloat(this.state.currentLongitude),
+              }}
+              draggable
+              tracksViewChanges={true}
+              onDragEnd={e => {
+                console.log('dragEnd', e.nativeEvent.coordinate);
+              }}
+              pinColor="#CD5C5C"
+            />
+          </MapView>
+          <View style={styles.btnView}>
+            <TouchableOpacity
+              style={styles.touchableButton}
+              onPress={() => {
+                this.props.navigation.navigate('Scan', {
+                  latitude: this.state.currentLatitude,
+                  longitude: this.state.currentLongitude,
+                  addr: addr,
+                });
+              }}>
+              <Text
+                style={{fontWeight: 'bold', fontSize: 15, color: '#191970'}}>
+                Use current location
+              </Text>
+            </TouchableOpacity>
+          </View>
+          {/* <View style={styles.container, }> */}
+          <View style={{display: 'none'}}>
+            <Image
+              source={{
+                uri: 'https://raw.githubusercontent.com/AboutReact/sampleresource/master/location.png',
+              }}
+              style={{width: 100, height: 100}}
+            />
+            <Text style={styles.boldText}>{this.state.locationStatus}</Text>
+            <Text
+              style={{
+                justifyContent: 'center',
+                alignItems: 'center',
+                marginTop: 16,
+              }}>
+              Longitude: {this.state.currentLongitude}
             </Text>
-          </TouchableOpacity>
-        </View>
-        {/* <View style={styles.container, }> */}
-        <View style={{display: 'none'}}>
-          <Image
-            source={{
-              uri: 'https://raw.githubusercontent.com/AboutReact/sampleresource/master/location.png',
-            }}
-            style={{width: 100, height: 100}}
-          />
-          <Text style={styles.boldText}>{locationStatus}</Text>
-          <Text
-            style={{
-              justifyContent: 'center',
-              alignItems: 'center',
-              marginTop: 16,
-            }}>
-            Longitude: {currentLongitude}
-          </Text>
-          <Text
-            style={{
-              justifyContent: 'center',
-              alignItems: 'center',
-              marginTop: 16,
-            }}>
-            Latitude: {currentLatitude}
-          </Text>
-          <View style={{marginTop: 20}}>
-            <Button title="Button" onPress={getOneTimeLocation} />
+            <Text
+              style={{
+                justifyContent: 'center',
+                alignItems: 'center',
+                marginTop: 16,
+              }}>
+              Latitude: {this.state.currentLatitude}
+            </Text>
+            <View style={{marginTop: 20}}>
+              <Button title="Button" onPress={this.getOneTimeLocation} />
+            </View>
+          </View>
+          <View style={{display: 'none'}}>
+            <Text
+              style={{
+                fontSize: 18,
+                textAlign: 'center',
+                color: 'grey',
+              }}>
+              React Native Geolocation
+            </Text>
+            <Text
+              style={{
+                fontSize: 16,
+                textAlign: 'center',
+                color: 'grey',
+              }}>
+              www.aboutreact.com
+            </Text>
           </View>
         </View>
-        <View style={{display: 'none'}}>
-          <Text
-            style={{
-              fontSize: 18,
-              textAlign: 'center',
-              color: 'grey',
-            }}>
-            React Native Geolocation
-          </Text>
-          <Text
-            style={{
-              fontSize: 16,
-              textAlign: 'center',
-              color: 'grey',
-            }}>
-            www.aboutreact.com
-          </Text>
-        </View>
-      </View>
-    </SafeAreaView>
-  );
-};
+      </SafeAreaView>
+    );
+  }
+}
 
 const styles = StyleSheet.create({
   container1: {
@@ -264,7 +284,25 @@ const styles = StyleSheet.create({
   },
 });
 
-export default GeoLocation;
+export default GeoLocation_old;
+
+// import React, {Component} from 'react';
+// import {
+//   Text,
+//   StyleSheet,
+//   View,
+//   platform,
+//   image,
+//   Button,
+//   TouchableOpacity,
+// } from 'react-native';
+// import MapView, {Marker, PROVIDER_GOOGLE} from 'react-native-maps';
+// import Geolocation from '@react-native-community/geolocation';
+// import {Dimensions} from 'react-native';
+// import Icon from 'react-native-vector-icons/Ionicons';
+// import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+// import Fontisto from 'react-native-vector-icons/Fontisto';
+// import Geocoder from 'react-native-geocoder';
 
 // let {width, height} = Dimensions.get('window');
 // const ASPECT_RATIO = width / height;

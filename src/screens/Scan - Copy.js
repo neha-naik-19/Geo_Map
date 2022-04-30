@@ -80,7 +80,7 @@ const Scan = prop => {
       //   },
       // };
 
-      let duplicate = false;
+      let dupVal = 0;
 
       const configurationObject = {
         method: 'POST',
@@ -101,12 +101,13 @@ const Scan = prop => {
         console.log(result[i].id, '   ', response.data.id);
         if (response.data.id === result[i].id) {
           // console.log('prod :: ', result[i].id);
-          duplicate = true;
+          dupVal = true;
+          Alert.alert('Duplicate product entry.\nPlease check.');
           break;
         }
       }
 
-      // console.log('duplicate :: ', duplicate);
+      console.log('dupVal :: ', dupVal);
 
       if (!dupVal) {
         if (data.length == 0) {
@@ -134,14 +135,7 @@ const Scan = prop => {
         }
 
         setResult(product);
-
-        if (!duplicate) {
-          setHideBtn(true);
-        } else {
-          setHideBtn(false);
-        }
-
-        setDupVal(duplicate);
+        setHideBtn(true);
       }
     } catch (error) {
       // console.log('request error : ', error.request);
@@ -229,7 +223,6 @@ const Scan = prop => {
     setScan(true);
     setScanResult(false);
     setCount(0);
-    setDupVal(false);
   };
 
   function Message({message, hideMessage}) {
@@ -281,11 +274,7 @@ const Scan = prop => {
           <Fragment>
             <View style={scanResult ? styles.scanCardView : styles.cardView}>
               {loading ? (
-                <View
-                  style={{
-                    flex: 1,
-                    alignItems: 'center',
-                  }}>
+                <View style={{flex: 1}}>
                   <ActivityIndicator size="large" color="#0000ff" />
                   <Text style={styles.textfiled}>Please wait..</Text>
                 </View>
@@ -295,114 +284,252 @@ const Scan = prop => {
                     <View
                       style={{
                         flex: 7,
+                        flexDirection: 'row',
+                        justifyContent: 'space-evenly',
+                        marginBottom: 2,
                       }}>
-                      <View style={!dupVal ? styles.outerView : styles.hide}>
+                      <View
+                        style={{
+                          flex: 1,
+                          justifyContent: 'space-evenly',
+                          marginRight: 2,
+                        }}>
                         <View
                           style={{
                             flex: 1,
-                            justifyContent: 'space-evenly',
-                            marginRight: 2,
                           }}>
-                          <View
-                            style={{
-                              flex: 1,
-                            }}>
-                            <Text style={styles.dataLabel}>Product :</Text>
-                          </View>
-                          <View
-                            style={{
-                              flex: 1,
-                            }}>
-                            <Text style={styles.dataLabel}>Amount :</Text>
-                          </View>
-                          <View
-                            style={{
-                              flex: 1,
-                            }}>
-                            <Text style={styles.dataLabel}>Quantity :</Text>
-                          </View>
-                          <View
-                            style={{
-                              flex: 1,
-                            }}>
-                            <Text style={styles.dataLabel}>Unit :</Text>
-                          </View>
+                          <Text style={styles.dataLabel}>Product :</Text>
                         </View>
                         <View
                           style={{
-                            flex: 2,
-                            justifyContent: 'space-evenly',
+                            flex: 1,
                           }}>
-                          <View
-                            style={{
-                              flex: 1,
-                            }}>
-                            <Text style={styles.dataText}>
-                              {result[0].name}
-                            </Text>
-                          </View>
-                          <View
-                            style={{
-                              flex: 1,
-                            }}>
-                            <Text
-                              style={
-                                styles.dataText
-                              }>{`Rs. ${result[0].price}`}</Text>
-                          </View>
-                          <View
-                            style={{
-                              flexDirection: 'row',
-                              flex: 1,
-                            }}>
-                            <View
-                              style={{
-                                flex: 1,
-                              }}>
-                              <Text style={styles.dataText}>{count}</Text>
-                            </View>
-                            <View
-                              style={{
-                                flex: 4,
-                              }}>
-                              <View style={{flex: 1, flexDirection: 'row'}}>
-                                <TouchableOpacity
-                                  onPress={() => {
-                                    increamentQty(result[0].stock);
-                                  }}>
-                                  <Icon
-                                    name="add-circle"
-                                    size={35}
-                                    style={{color: 'green'}}></Icon>
-                                </TouchableOpacity>
-                                <TouchableOpacity onPress={decrementQty}>
-                                  <Icon
-                                    name="remove-circle"
-                                    size={35}
-                                    style={{color: 'darkred'}}></Icon>
-                                </TouchableOpacity>
-                              </View>
-                            </View>
-                          </View>
-                          <View style={{flex: 1}}>
-                            <Text style={styles.dataText}>
-                              {result[0].unit}
-                            </Text>
-                          </View>
+                          <Text style={styles.dataLabel}>Amount :</Text>
+                        </View>
+                        <View
+                          style={{
+                            flex: 1,
+                          }}>
+                          <Text style={styles.dataLabel}>Quantity :</Text>
+                        </View>
+                        <View
+                          style={{
+                            flex: 1,
+                          }}>
+                          <Text style={styles.dataLabel}>Unit :</Text>
                         </View>
                       </View>
-                      <View style={dupVal ? styles.outerView : styles.hide}>
-                        <Text
+                      <View
+                        style={{
+                          flex: 2,
+                          justifyContent: 'space-evenly',
+                        }}>
+                        <View
                           style={{
-                            fontSize: 20,
-                            textAlign: 'center',
-                            color: '#C70039',
+                            flex: 1,
                           }}>
-                          Duplicate product entry.{'\n\n'}Please check.
-                        </Text>
+                          <Text style={styles.dataText}>{result[0].name}</Text>
+                        </View>
+                        <View
+                          style={{
+                            flex: 1,
+                          }}>
+                          <Text
+                            style={
+                              styles.dataText
+                            }>{`Rs. ${result[0].price}`}</Text>
+                        </View>
+                        <View
+                          style={{
+                            flexDirection: 'row',
+                            flex: 1,
+                          }}>
+                          <View
+                            style={{
+                              flex: 1,
+                            }}>
+                            <Text style={styles.dataText}>{count}</Text>
+                          </View>
+                          <View
+                            style={{
+                              flex: 4,
+                            }}>
+                            <View style={{flex: 1, flexDirection: 'row'}}>
+                              <TouchableOpacity
+                                onPress={() => {
+                                  increamentQty(result[0].stock);
+                                }}>
+                                <Icon
+                                  name="add-circle"
+                                  size={35}
+                                  style={{color: 'green'}}></Icon>
+                              </TouchableOpacity>
+                              <TouchableOpacity onPress={decrementQty}>
+                                <Icon
+                                  name="remove-circle"
+                                  size={35}
+                                  style={{color: 'darkred'}}></Icon>
+                              </TouchableOpacity>
+                            </View>
+                          </View>
+                        </View>
+                        <View style={{flex: 1}}>
+                          <Text style={styles.dataText}>{result[0].unit}</Text>
+                        </View>
                       </View>
+
+                      {/* <View style={styles.viewText}>
+                        <Text style={styles.dataLabel}>Product :</Text>
+                        <Text style={styles.dataText}>{result[0].name}</Text>
+                      </View>
+                      <View style={styles.viewText}>
+                        <Text style={styles.dataLabel}>Amount :</Text>
+                        <Text
+                          style={
+                            styles.dataText
+                          }>{`Rs. ${result[0].price}`}</Text>
+                      </View>
+                      <View style={styles.viewQty}>
+                        <View
+                          style={{
+                            flexDirection: 'row',
+                            marginRight: 25,
+                          }}>
+                          <Text style={styles.dataLabel}>Quantity :</Text>
+                          <Text style={styles.dataText}>{count}</Text>
+                        </View>
+                        <View
+                          style={{
+                            flexDirection: 'row',
+                          }}>
+                          <TouchableOpacity
+                            onPress={() => {
+                              increamentQty(result[0].stock);
+                            }}>
+                            <Icon
+                              name="add-circle"
+                              size={35}
+                              style={{color: 'green'}}></Icon>
+                          </TouchableOpacity>
+                        </View>
+                        <View>
+                          <TouchableOpacity onPress={decrementQty}>
+                            <Icon
+                              name="remove-circle"
+                              size={35}
+                              style={{color: 'darkred'}}></Icon>
+                          </TouchableOpacity>
+                        </View>
+                      </View> */}
+                      {/* <View
+                        style={{
+                          // justifyContent: 'center',
+                          alignItems: 'center',
+                          borderWidth: 2,
+                          borderColor: '#D3D3D3',
+                          width: '50%',
+                          borderRadius: 10,
+                          padding: 5,
+                        }}>
+                        <TouchableOpacity
+                          style={{
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                          }}
+                          activeOpacity={0.5}
+                          onPress={() =>
+                            prop.navigation.navigate('GeoLocation')
+                          }>
+                          <Image
+                            source={{
+                              uri: 'https://raw.githubusercontent.com/AboutReact/sampleresource/master/location.png',
+                            }}
+                            style={{
+                              width: 50,
+                              height: 50,
+                            }}
+                          />
+                          <Text style={{fontWeight: 'bold', fontSize: 17}}>
+                            Current Location
+                          </Text>
+                        </TouchableOpacity>
+                      </View> */}
+                      {/* <Text
+                        style={{
+                          marginTop: 15,
+                          fontSize: 15,
+                          color: '#A0522D',
+                        }}>
+                        {prop.route.params === undefined
+                          ? ''
+                          : prop.route.params.addr.formattedAddress}
+                      </Text> */}
+                      {/* <View
+                        style={{
+                          position: 'absolute',
+                          bottom: 0,
+                          flexDirection: 'row',
+                          justifyContent: 'space-evenly',
+                          alignItems: 'center',
+                        }}>
+                        <TouchableOpacity
+                          onPress={addToList}
+                          style={!hideBtn ? styles.hideBtn : styles.buttonScan}>
+                          <View style={styles.buttonWrapper}>
+                            <Icon
+                              name="cart"
+                              size={30}
+                              style={{color: '#15317E'}}></Icon>
+                            <Text>Add</Text>
+                          </View>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                          onPress={cancelAdd}
+                          style={!hideBtn ? styles.hideBtn : styles.buttonScan}>
+                          <View style={styles.buttonWrapper}>
+                            <Icon
+                              name="archive-outline"
+                              size={30}
+                              style={{color: '#15317E'}}></Icon>
+                            <Text>Cancel</Text>
+                          </View>
+                        </TouchableOpacity>
+                      </View> */}
                     </View>
                   )}
+
+                  {/* <View
+                    style={{
+                      flexDirection: 'row',
+                      justifyContent: 'space-evenly',
+                    }}>
+                    <TouchableOpacity
+                      onPress={scanAgain}
+                      style={hideBtn ? styles.hideBtn : styles.buttonScan}>
+                      <View style={styles.buttonWrapper}>
+                        <Icon name="camera-outline" size={30}></Icon>
+                        <Text
+                          style={{...styles.buttonTextStyle, color: '#2196f3'}}>
+                          scan again
+                        </Text>
+                      </View>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      onPress={() => {
+                        navigation.push('Test', {
+                          products: objectData,
+                          deleteItem: deleteItem,
+                        });
+                      }}
+                      style={hideBtn ? styles.hideBtn : styles.buttonScan}>
+                      <View style={styles.buttonWrapper}>
+                        <Text
+                          style={{...styles.buttonTextStyle, color: '#2196f3'}}>
+                          Continue
+                        </Text>
+                      </View>
+                    </TouchableOpacity>
+                  </View> */}
 
                   <View
                     style={{
