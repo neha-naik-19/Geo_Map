@@ -14,7 +14,7 @@ import {
 import QRCodeScanner from 'react-native-qrcode-scanner';
 import styles from './scanStyle';
 import ProductList from './ProductList';
-import Test from './Test';
+import Products from './Products';
 import Icon from 'react-native-vector-icons/Ionicons';
 import axios from 'axios';
 import {MessageBar, showMessage} from 'react-native-messages';
@@ -98,7 +98,7 @@ const Scan = prop => {
       setLoading(false);
 
       for (const i in result) {
-        console.log(result[i].id, '   ', response.data.id);
+        // console.log(result[i].id, '   ', response.data.id);
         if (response.data.id === result[i].id) {
           // console.log('prod :: ', result[i].id);
           duplicate = true;
@@ -189,6 +189,8 @@ const Scan = prop => {
 
       product1 = [...objectData];
       setProducts([...product1]);
+
+      // console.log('products :-> ', products);
     }
   };
 
@@ -211,14 +213,19 @@ const Scan = prop => {
     }
   };
 
-  deleteItem = id => {
-    // let prod = product;
-    // let index = prod.findIndex(c => c.id === id);
-    // if (index !== -1) {
-    //   prod.splice(index, 1);
-    // }
-    // setProducts(prod);
-  };
+  // deleteItem = id => {
+  //   let prod = products;
+  //   let index = prod.findIndex(c => c.id === id);
+  //   if (index !== -1) {
+  //     prod.splice(index, 1);
+  //   }
+  //   objectData = prod;
+  //   setProducts(prod);
+
+  //   // console.log(id);
+  //   console.log('products :: ', products);
+  //   console.log('objectData :: ', objectData);
+  // };
 
   const activeQR = () => {
     setScan(true);
@@ -477,8 +484,9 @@ const Scan = prop => {
                       </TouchableOpacity>
                       <TouchableOpacity
                         onPress={() => {
-                          navigation.push('Test', {
+                          navigation.push('Products', {
                             products: objectData,
+                            deleteItem: deleteItem,
                           });
                         }}
                         style={hideBtn ? styles.hide : styles.buttonProd}>

@@ -16,6 +16,7 @@ import {View, Text, Button, BackHandler} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import Scan from './src/screens/Scan';
+import Products from './src/screens/Products';
 import Test from './src/screens/Test';
 import GeoLocation from './src/screens/GeoLocation';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -27,7 +28,8 @@ function App() {
     <NavigationContainer>
       <Stack.Navigator
         initialRouteName="Scan"
-        screenOptions={{headerShown: false}}>
+        // screenOptions={{headerShown: false}}
+      >
         <Stack.Screen
           name="Scan"
           component={Scan}
@@ -35,8 +37,9 @@ function App() {
             headerShown: false,
           }}
         />
-        <Stack.Screen name="Test" component={Test} />
+        <Stack.Screen name="Products" component={Products} />
         <Stack.Screen name="GeoLocation" component={GeoLocation} />
+        <Stack.Screen name="Test" component={Test} />
       </Stack.Navigator>
     </NavigationContainer>
   );
