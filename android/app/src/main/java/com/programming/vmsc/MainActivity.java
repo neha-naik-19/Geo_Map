@@ -1,4 +1,4 @@
-package com.retailapp;
+package com.programming.vmsc;
 
 import com.facebook.react.ReactActivity;
 
