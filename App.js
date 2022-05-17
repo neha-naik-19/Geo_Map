@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import React, {Component, useState, useEffect} from 'react';
 import {
   Text,
@@ -14,6 +15,29 @@ import {
 import MapView, {Marker, PROVIDER_GOOGLE} from 'react-native-maps';
 import Geolocation from '@react-native-community/geolocation';
 import {Dimensions} from 'react-native';
+=======
+// import React from 'react';
+// import Scan from './src/screens/Scan';
+// import Scan_1 from './src/screens/Scan_1';
+// import ScanScreen from './src/screens/ScanScreen';
+// // import {MessageBar} from 'react-native-messages';
+// const App = () => {
+//   return <Scan />;
+//   // return <Scan_1 />;
+//   // return <ScanScreen />;
+// };
+
+// export default App;
+
+import * as React from 'react';
+import {View, Text, Button, BackHandler} from 'react-native';
+import {NavigationContainer} from '@react-navigation/native';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import Scan from './src/screens/Scan';
+import Products from './src/screens/Products';
+import Test from './src/screens/Test';
+import GeoLocation from './src/screens/GeoLocation';
+>>>>>>> 29b77cb4e1e371696f2b0cb13542ce39eaaf2c0b
 import Icon from 'react-native-vector-icons/Ionicons';
 // import Geocoder from 'react-native-geocoder';
 import DeviceInfo from 'react-native-device-info';
@@ -157,6 +181,7 @@ const App = prop => {
   //  }
 
   return (
+<<<<<<< HEAD
     <SafeAreaView style={{flex: 1}}>
       <View style={styles.container}>
         <MapView
@@ -257,6 +282,25 @@ const App = prop => {
         </View>
       </View>
     </SafeAreaView>
+=======
+    <NavigationContainer>
+      <Stack.Navigator
+        initialRouteName="Scan"
+        // screenOptions={{headerShown: false}}
+      >
+        <Stack.Screen
+          name="Scan"
+          component={Scan}
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen name="Products" component={Products} />
+        <Stack.Screen name="GeoLocation" component={GeoLocation} />
+        <Stack.Screen name="Test" component={Test} />
+      </Stack.Navigator>
+    </NavigationContainer>
+>>>>>>> 29b77cb4e1e371696f2b0cb13542ce39eaaf2c0b
   );
 };
 
